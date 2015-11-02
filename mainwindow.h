@@ -19,9 +19,9 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_lineEdit_returnPressed();
-
     void on_listWidget_itemChanged(QListWidgetItem *item);
+
+    void on_doubleSpinBox_editingFinished();
 
 protected:
     bool eventFilter(QObject *target, QEvent *event);

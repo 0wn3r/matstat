@@ -17,28 +17,6 @@ MainWindow::~MainWindow()
     delete vector;
 }
 
-
-void MainWindow::on_lineEdit_returnPressed()
-{
-    if(!ui->lineEdit->text().isEmpty())
-    {
-        ui->listWidget->addItem(ui->lineEdit->text());
-        vector->push_back(ui->lineEdit->text().toFloat());
-        ui->lineEdit->clear();
-    }
-    for (int ii = 0; ii < ui->listWidget->count(); ii++) {
-        ui->listWidget->item(ii)->setFlags(ui->listWidget->item(ii)->flags() | Qt::ItemIsEditable);
-    }
-    float sum = 0;
-    for (int i = 0; i < vector->size(); i++)
-    {
-        sum += vector->at(i);
-    }
-    QString str;
-    str = QString("%1").arg(sum);
-    ui->label->setText(str);
-}
-
 bool MainWindow::eventFilter(QObject *target, QEvent *event)
 {
     if (target == ui->listWidget) {
@@ -65,6 +43,7 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
     return QMainWindow::eventFilter(target, event);
 }
 
+
 void MainWindow::on_listWidget_itemChanged(QListWidgetItem *item)
 {
     if (item->isSelected())
@@ -79,4 +58,24 @@ void MainWindow::on_listWidget_itemChanged(QListWidgetItem *item)
         str = QString("%1").arg(sum);
         ui->label->setText(str);
     }
+}
+
+void MainWindow::on_doubleSpinBox_editingFinished()
+{
+    if (ui->doubleSpinBox->cleanText() == "")
+        return;
+    ui->listWidget->addItem(ui->doubleSpinBox->cleanText());
+    vector->push_back(ui->doubleSpinBox->value());
+    ui->doubleSpinBox->clear();
+    for (int ii = 0; ii < ui->listWidget->count(); ii++) {
+        ui->listWidget->item(ii)->setFlags(ui->listWidget->item(ii)->flags() | Qt::ItemIsEditable);
+    }
+    float sum = 0;
+    for (int i = 0; i < vector->size(); i++)
+    {
+        sum += vector->at(i);
+    }
+    QString str;
+    str = QString("%1").arg(sum);
+    ui->label->setText(str);
 }
