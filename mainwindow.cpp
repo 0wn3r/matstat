@@ -23,9 +23,7 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
         if (event->type() == QEvent::KeyPress) {
             QKeyEvent *keyEvent = (QKeyEvent*)event;
             if (keyEvent->key() == Qt::Key_Delete) {
-              auto it = list->begin();
-              for (int i = 0; i < ui->listWidget->currentRow(); i++)
-                  it++;
+              auto it = std::next(list->begin(), ui->listWidget->currentRow());
               list->erase(it);
               QListWidgetItem *item = ui->listWidget->item(ui->listWidget->currentRow());
               delete item;
@@ -52,9 +50,7 @@ void MainWindow::on_listWidget_itemChanged(QListWidgetItem *item)
 {
     if (item->isSelected())
     {
-        auto it = list->begin();
-        for (int i = 0; i < ui->listWidget->currentRow(); i++)
-            it++;
+        auto it = std::next(list->begin(), listWidget->currentRow());
         *it = item->text().toFloat();
         float sum = 0;
         for (auto it = list->begin(); it != list->end(); ++it)

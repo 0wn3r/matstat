@@ -28,7 +28,6 @@ protected:
     bool eventFilter(QObject *target, QEvent *event);
 private:
     Ui::MainWindow *ui;
-    //QVector<float> *vector;
     std::list<float> *list;
 };
 
