@@ -5,6 +5,7 @@
 #include <QStringListModel>
 #include <QKeyEvent>
 #include <QListWidgetItem>
+#include <list>
 
 namespace Ui {
 class MainWindow;
@@ -27,7 +28,8 @@ protected:
     bool eventFilter(QObject *target, QEvent *event);
 private:
     Ui::MainWindow *ui;
-    QVector<float> *vector;
+    //QVector<float> *vector;
+    std::list<float> *list;
 };
 
 #endif // MAINWINDOW_H
