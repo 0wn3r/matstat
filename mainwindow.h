@@ -9,6 +9,13 @@
 #include <list>
 #include <vector>
 
+struct datavalue
+{
+    double num;
+    unsigned int set_number;
+    int rank;
+};
+
 namespace Ui {
 class MainWindow;
 }
@@ -32,8 +39,9 @@ protected:
     bool eventFilter(QObject *target, QEvent *event);
 private:
     Ui::MainWindow *ui;
-    std::list<float> *list;
-    std::vector<std::list<float> *> *vector;
+    std::list<datavalue> *list;
+    std::vector<std::list<datavalue> *> *vector;
+    unsigned int global_counter = 0;
 };
 
 #endif // MAINWINDOW_H

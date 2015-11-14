@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    list = new std::list<float>;
-    vector = new std::vector<std::list<float> *>;
+    list = new std::list<datavalue>;
+    vector = new std::vector<std::list<datavalue> *>;
 }
 
 MainWindow::~MainWindow()
@@ -35,15 +35,6 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
               list->erase(it);
               QListWidgetItem *item = ui->listWidget->item(ui->listWidget->currentRow());
               delete item;
-              float sum = 0;
-              for (auto it = list->begin(); it != list->end(); ++it)
-              {
-                  sum += *it;
-              }
-
-              QString str;
-              str = QString("%1").arg(sum);
-              ui->label->setText(str);
               return true;}
         } else {
             return false;
@@ -71,15 +62,7 @@ void MainWindow::on_listWidget_itemChanged(QListWidgetItem *item)
     if (item->isSelected())
     {
         auto it = std::next(list->begin(), ui->listWidget->currentRow());
-        *it = item->text().toFloat();
-        float sum = 0;
-        for (auto it = list->begin(); it != list->end(); ++it)
-        {
-            sum += *it;
-        }
-        QString str;
-        str = QString("%1").arg(sum);
-        ui->label->setText(str);
+        (*it).num = item->text().toFloat();
     }
 }
 
@@ -88,24 +71,20 @@ void MainWindow::on_doubleSpinBox_editingFinished()
     if (ui->doubleSpinBox->cleanText() == "")
         return;
     ui->listWidget->addItem(ui->doubleSpinBox->cleanText());
-    list->push_back(ui->doubleSpinBox->value());
+    datavalue temp;
+    temp.num = ui->doubleSpinBox->value();
+    temp.set_number = global_counter;
+    temp.rank = 0;
+    list->push_back(temp);
     ui->doubleSpinBox->clear();
     for (int ii = 0; ii < ui->listWidget->count(); ii++) {
         ui->listWidget->item(ii)->setFlags(ui->listWidget->item(ii)->flags() | Qt::ItemIsEditable);
     }
-    float sum = 0;
-    for (auto it = list->begin(); it != list->end(); ++it)
-    {
-        sum += *it;
-    }
-    QString str;
-    str = QString("%1").arg(sum);
-    ui->label->setText(str);
 }
 
 void MainWindow::on_pushButton_pressed()
 {
-    list->sort();
+    list->sort([](const datavalue &a, const datavalue &b){return a.num < b.num;});
     vector->push_back(list);
     if (list->size() > static_cast<size_t>(ui->tableWidget->columnCount()) || list->size() == 1)
     {
@@ -116,9 +95,10 @@ void MainWindow::on_pushButton_pressed()
     for (auto it = list->begin(); it != list->end(); ++it, i++)
     {
         QString str;
-        str = QString("%1").arg(*it);
+        str = QString("%1").arg((*it).num);
         ui->tableWidget->setItem(vector->size()-1, i, new QTableWidgetItem(str));
     }
     list->clear();
     ui->listWidget->clear();
+    global_counter++;
 }
