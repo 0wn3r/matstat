@@ -71,19 +71,18 @@ void MainWindow::on_doubleSpinBox_editingFinished()
     if (ui->doubleSpinBox->cleanText() == "")
         return;
     ui->listWidget->addItem(ui->doubleSpinBox->cleanText());
-    datavalue temp;
-    temp.num = ui->doubleSpinBox->value();
-    temp.set_number = global_counter;
-    temp.rank = 0;
+    datavalue temp = { ui->doubleSpinBox->value(), global_counter, 0};
     list->push_back(temp);
     ui->doubleSpinBox->clear();
-    for (int ii = 0; ii < ui->listWidget->count(); ii++) {
-        ui->listWidget->item(ii)->setFlags(ui->listWidget->item(ii)->flags() | Qt::ItemIsEditable);
+    for (int i = 0; i < ui->listWidget->count(); i++) {
+        ui->listWidget->item(i)->setFlags(ui->listWidget->item(i)->flags() | Qt::ItemIsEditable);
     }
 }
 
 void MainWindow::on_pushButton_pressed()
 {
+    if (!list->size())
+        return;
     list->sort([](const datavalue &a, const datavalue &b){return a.num < b.num;});
     vector->push_back(list);
     if (list->size() > static_cast<size_t>(ui->tableWidget->columnCount()) || list->size() == 1)
