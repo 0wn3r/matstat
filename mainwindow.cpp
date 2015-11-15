@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     list = new std::list<datavalue>;
-    vector = new std::vector<std::list<datavalue> *>;
+    vector = new std::vector<std::list<datavalue>>;
 }
 
 MainWindow::~MainWindow()
@@ -84,20 +84,93 @@ void MainWindow::on_pushButton_pressed()
     if (!list->size())
         return;
     list->sort([](const datavalue &a, const datavalue &b){return a.num < b.num;});
-    vector->push_back(list);
+    vector->push_back(*list);
     if (list->size() > static_cast<size_t>(ui->tableWidget->columnCount()) || list->size() == 1)
     {
         ui->tableWidget->setColumnCount(list->size());
     }
     ui->tableWidget->setRowCount(vector->size());
-    int i = 0;
-    for (auto it = list->begin(); it != list->end(); ++it, i++)
+    for (auto it = list->begin(); it != list->end(); ++it)
     {
-        QString str;
-        str = QString("%1").arg((*it).num);
-        ui->tableWidget->setItem(vector->size()-1, i, new QTableWidgetItem(str));
+        QString str = QString("%1").arg((*it).num);
+        ui->tableWidget->setItem(vector->size()-1, std::distance(list->begin(), it), new QTableWidgetItem(str));
     }
     list->clear();
     ui->listWidget->clear();
     global_counter++;
+}
+
+int MainWindow::RosenbaumCriteria()
+{
+    if (vector->size() != 2)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("1.");
+        msgBox.exec();
+        return 0;
+    }
+    if (vector->at(0).size() < 11 || vector->at(1).size() < 11)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("2.");
+        msgBox.exec();
+        return 0;
+    }
+    if (vector->at(0).size() <= 50 && vector->at(1).size() <= 50 && abs(vector->at(0).size() - vector->at(1).size()) > 10)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("3.");
+        msgBox.exec();
+        return 0;
+    }
+    if (vector->at(0).size() > 50 && vector->at(0).size() <= 100 && vector->at(1).size() > 50 && vector->at(1).size() <= 100 && abs(vector->at(0).size() - vector->at(1).size()) > 20)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("4.");
+        msgBox.exec();
+        return 0;
+    }
+    if (vector->at(0).size() > 100 && vector->at(1).size() > 100 && ((float)vector->at(0).size() / (float)vector->at(1).size() < 0.5 || (float)vector->at(0).size() / (float)vector->at(1).size() > 2.0))
+    {
+        QMessageBox msgBox;
+        msgBox.setText("5.");
+        msgBox.exec();
+        return 0;
+    }
+    double sum[2] = {0,0};
+    int mainIndex = 0;
+    for (size_t i = 0; i < vector->size(); i++)
+    {
+        for (auto it = vector->at(i).begin(); it != vector->at(i).end(); ++it)
+        {
+            sum[i] += (*it).num;
+        }
+    }
+    if (sum[0] < sum[1])
+    {
+       mainIndex = 1;
+    }
+    double maxFromSideSet = (*std::max_element(vector->at(!mainIndex).begin(), vector->at(!mainIndex).end(), [](const datavalue &a, const datavalue &b){return a.num < b.num;})).num;
+    int S1 = count_if(vector->at(mainIndex).begin(), vector->at(mainIndex).end(), [maxFromSideSet](const datavalue &a){return a.num > maxFromSideSet;});
+    double minFromMainSet = (*std::min_element(vector->at(mainIndex).begin(), vector->at(mainIndex).end(), [](const datavalue &a, const datavalue &b){return a.num < b.num;})).num;
+    int S2 = count_if(vector->at(!mainIndex).begin(), vector->at(!mainIndex).end(), [minFromMainSet](const datavalue &a){return a.num < minFromMainSet;});
+    int Q = S1 + S2;
+    QString str;
+    str = QString("maxFromSideSet %1").arg(maxFromSideSet);
+    ui->label->setText(str);
+    str = QString("S1 %1").arg(S1);
+    ui->label_2->setText(str);
+    str = QString("minFromMainSet %1").arg(minFromMainSet);
+    ui->label_3->setText(str);
+    str = QString("S2 %1").arg(S2);
+    ui->label_4->setText(str);
+    str = QString("Q %1").arg(Q);
+    ui->label_5->setText(str);
+
+    return 1;
+}
+
+void MainWindow::on_pushButton_2_pressed()
+{
+    RosenbaumCriteria();
 }
