@@ -1,6 +1,40 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+int rosenbaum_p005[16][16] = {{6, 6, 6, 7, 7, 8, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8},
+                              {6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8},
+                              {6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8},
+                              {7, 7, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8},
+                              {7, 7, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8},
+                              {8, 7, 7, 7, 6, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8},
+                              {7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8},
+                              {7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8},
+                              {7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8},
+                              {7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 7, 8},
+                              {8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
+                              {8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
+                              {8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
+                              {8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7},
+                              {8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7},
+                              {8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7}};
+
+int rosenbaum_p001[16][16] = {{9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12, 12, 12},
+                              {9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 12},
+                              {9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 11, 11, 11},
+                              {9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 11},
+                              {9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10},
+                              {9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10},
+                              {10, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10},
+                              {10, 10, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10},
+                              {10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10},
+                              {10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9},
+                              {11, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9},
+                              {11, 11, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9},
+                              {11, 11, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9},
+                              {12, 11, 11, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9, 9},
+                              {12, 11, 11, 10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9},
+                              {12, 12, 11, 11, 10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9}};
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -155,6 +189,17 @@ int MainWindow::RosenbaumCriteria()
     double minFromMainSet = (*std::min_element(vector->at(mainIndex).begin(), vector->at(mainIndex).end(), [](const datavalue &a, const datavalue &b){return a.num < b.num;})).num;
     int S2 = count_if(vector->at(!mainIndex).begin(), vector->at(!mainIndex).end(), [minFromMainSet](const datavalue &a){return a.num < minFromMainSet;});
     int Q = S1 + S2;
+    int Q001, Q005;
+    if (vector->at(0).size() > 26 || vector->at(1).size() > 26)
+    {
+        Q001 = 10;
+        Q005 = 8;
+    }
+    else
+    {
+        Q001 = rosenbaum_p001[vector->at(0).size() - 11][vector->at(1).size() - 11];
+        Q005 = rosenbaum_p005[vector->at(0).size() - 11][vector->at(1).size() - 11];
+    }
     QString str;
     str = QString("maxFromSideSet %1").arg(maxFromSideSet);
     ui->label->setText(str);
@@ -166,6 +211,10 @@ int MainWindow::RosenbaumCriteria()
     ui->label_4->setText(str);
     str = QString("Q %1").arg(Q);
     ui->label_5->setText(str);
+    str = QString("Q005 %1").arg(Q005);
+    ui->label_6->setText(str);
+    str = QString("Q001 %1").arg(Q001);
+    ui->label_7->setText(str);
 
     return 1;
 }
