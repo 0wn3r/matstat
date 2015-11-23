@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     list = new std::list<datavalue>;
     vector = new std::vector<std::list<datavalue>>;
+
 }
 
 MainWindow::~MainWindow()
@@ -119,7 +120,7 @@ void MainWindow::on_pushButton_pressed()
         return;
     list->sort([](const datavalue &a, const datavalue &b){return a.num < b.num;});
     vector->push_back(*list);
-    if (list->size() > static_cast<size_t>(ui->tableWidget->columnCount()) || list->size() == 1)
+    if (list->size() > static_cast<size_t>(ui->tableWidget->columnCount()) || vector->size() == 1)
     {
         ui->tableWidget->setColumnCount(list->size());
     }
@@ -222,4 +223,58 @@ int MainWindow::RosenbaumCriteria()
 void MainWindow::on_pushButton_2_pressed()
 {
     RosenbaumCriteria();
+}
+
+int MainWindow::MannaWhitney()
+{
+    if (vector->size() != 2)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("1.");
+        msgBox.exec();
+        return 0;
+    }
+    std::list<datavalue> first(vector->at(0));
+    std::list<datavalue> second(vector->at(1));
+    first.merge(second);
+    first.sort([](const datavalue &a, const datavalue &b){return a.num < b.num;});
+
+    int i (0), k (0);
+    float sum (0);
+    for (auto it = first.begin(); it != first.end(); it++)
+    {
+        i++;
+        if (it != first.end() && (*it).num == (*(std::next(it, 1))).num)
+        {
+            k++;
+        }
+        else if ((it == first.end() || (*it).num != (*(std::next(it, 1))).num) && k != 0)
+        {
+            for (int j = 0; j <= k; j++)
+            {
+                sum += i-j;
+            }
+            sum /= static_cast<float>(k+1);
+            for (int j = 0; j <= k; j++)
+            {
+                (*std::prev(it, j)).rank = sum;
+            }
+            k = sum = 0;
+        }
+        else
+        {
+            (*it).rank = i;
+        }
+    }
+
+    for (auto it = first.begin(); it != first.end(); it++)
+    {
+        qDebug() << "value: " << (*it).num << " rank: " << (*it).rank << endl;
+    }
+    return 0;
+}
+
+void MainWindow::on_pushButton_3_pressed()
+{
+    MannaWhitney();
 }

@@ -10,12 +10,17 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <QtDebug>
 
 struct datavalue
 {
     double num;
     unsigned int set_number;
-    int rank;
+    float rank;
+    bool operator < (const datavalue &a)
+    {
+        return num < a.num;
+    }
 };
 
 namespace Ui {
@@ -30,6 +35,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     int RosenbaumCriteria();
+    int MannaWhitney();
 
 private slots:
     void on_listWidget_itemChanged(QListWidgetItem *item);
@@ -39,6 +45,8 @@ private slots:
     void on_pushButton_pressed();
 
     void on_pushButton_2_pressed();
+
+    void on_pushButton_3_pressed();
 
 protected:
     bool eventFilter(QObject *target, QEvent *event);
