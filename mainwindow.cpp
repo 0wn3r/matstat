@@ -263,7 +263,7 @@ void MainWindow::on_pushButton_2_pressed()
     RosenbaumCriteria();
 }
 
-int MainWindow::MannaWhitney()
+int MainWindow::MannWhitney()
 {
     if (vector->size() != 2)
     {
@@ -282,7 +282,6 @@ int MainWindow::MannaWhitney()
     std::list<datavalue> first(vector->at(0));
     std::list<datavalue> second(vector->at(1));
     first.merge(second);
-    first.sort([](const datavalue &a, const datavalue &b){return a.num < b.num;});
 
     float summ[2] = {0,0};
     unsigned int mainIndex = 0;
@@ -305,33 +304,7 @@ int MainWindow::MannaWhitney()
        sideIndex = (*vector->at(1).begin()).set_number;
     }
 
-    int i (0), k (0);
-    float sum (0);
-    for (auto it = first.begin(); it != first.end(); it++)
-    {
-        i++;
-        if (it != first.end() && (*it).num == (*(std::next(it, 1))).num)
-        {
-            k++;
-        }
-        else if ((it == first.end() || (*it).num != (*(std::next(it, 1))).num) && k != 0)
-        {
-            for (int j = 0; j <= k; j++)
-            {
-                sum += i-j;
-            }
-            sum /= static_cast<float>(k+1);
-            for (int j = 0; j <= k; j++)
-            {
-                (*std::prev(it, j)).rank = sum;
-            }
-            k = sum = 0;
-        }
-        else
-        {
-            (*it).rank = i;
-        }
-    }
+    RangeValues(first);
 
     double sumranks[2] = {0,0};
     unsigned int maincount (0);
@@ -376,5 +349,78 @@ int MainWindow::MannaWhitney()
 
 void MainWindow::on_pushButton_3_pressed()
 {
-    MannaWhitney();
+    MannWhitney();
+}
+
+int MainWindow::KruskalWallis()
+{
+    if (vector->size() < 2)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("1.");
+        msgBox.exec();
+        return 0;
+    }
+
+    std::vector<std::list<datavalue>> *vec = new std::vector<std::list<datavalue>>(*vector);
+    std::list<datavalue> temp;
+    for (auto &x : *vec)
+    {
+        temp.merge(x);
+    }
+    vec->clear();
+
+    RangeValues(temp);
+    temp.sort([](const datavalue &a, const datavalue &b){return a.set_number < b.set_number;});
+    int i (0);
+    for (auto it = temp.begin(); it != temp.end(); ++it)
+    {
+        if (it->set_number != std::next(it, 1)->set_number || it == temp.end())
+        {
+
+            std::list<datavalue> temp(std::prev(it, i), std::next(it, 1));
+            vec->push_back(temp);
+            i = 0;
+            continue;
+        }
+        i++;
+    }
+    return 0;
+
+}
+
+void MainWindow::on_pushButton_4_pressed()
+{
+    KruskalWallis();
+}
+
+void MainWindow::RangeValues(std::list<datavalue> &list)
+{
+    int i (0), k (0);
+    float sum (0);
+    for (auto it = list.begin(); it != list.end(); it++)
+    {
+        i++;
+        if (it != list.end() && (*it).num == (*(std::next(it, 1))).num)
+        {
+            k++;
+        }
+        else if ((it == list.end() || (*it).num != (*(std::next(it, 1))).num) && k != 0)
+        {
+            for (int j = 0; j <= k; j++)
+            {
+                sum += i-j;
+            }
+            sum /= static_cast<float>(k+1);
+            for (int j = 0; j <= k; j++)
+            {
+                (*std::prev(it, j)).rank = sum;
+            }
+            k = sum = 0;
+        }
+        else
+        {
+            (*it).rank = i;
+        }
+    }
 }

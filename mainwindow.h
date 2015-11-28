@@ -34,8 +34,10 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void RangeValues(std::list<datavalue> &list);
     int RosenbaumCriteria();
-    int MannaWhitney();
+    int MannWhitney();
+    int KruskalWallis();
 
 private slots:
     void on_listWidget_itemChanged(QListWidgetItem *item);
@@ -47,6 +49,8 @@ private slots:
     void on_pushButton_2_pressed();
 
     void on_pushButton_3_pressed();
+
+    void on_pushButton_4_pressed();
 
 protected:
     bool eventFilter(QObject *target, QEvent *event);
