@@ -35,6 +35,43 @@ int rosenbaum_p001[16][16] = {{9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12,
                               {12, 11, 11, 10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9},
                               {12, 12, 11, 11, 10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9}};
 
+int mann_witney_005[18][18] = {{0, 0, 1, 2, 2, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10, 11},
+                           {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18},
+                           {1, 2, 4, 5, 6, 8, 9, 11, 12, 13, 15, 16, 18, 19, 20, 22, 23, 25},
+                           {2, 3, 5, 7, 8, 10, 12, 14, 16, 17, 19, 21, 23, 25, 26, 28, 30, 32},
+                           {2, 4, 6, 8, 11, 13, 15, 17, 19, 21, 24, 26, 28, 30, 33, 35, 37, 39},
+                           {3, 5, 8, 10, 13, 15, 18, 20, 23, 26, 28, 31, 33, 36, 39, 41, 44, 47},
+                           {4, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54},
+                           {4, 7, 11, 14, 17, 20, 24, 27, 31, 34, 37, 41, 44, 48, 51, 55, 58, 62},
+                           {5, 8, 12, 16, 19, 23, 27, 31, 34, 38, 42, 46, 50, 54, 57, 61, 65, 69},
+                           {5, 9, 13, 17, 21, 26, 30, 34, 38, 42, 47, 51, 55, 60, 64, 68, 72, 77},
+                           {6, 10, 15, 19, 24, 28, 33, 37, 42, 47, 51, 56, 61, 65, 70, 75, 80, 84},
+                           {7, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 77, 82, 87, 92},
+                           {7, 12, 18, 23, 28, 33, 39, 44, 50, 55, 61, 66, 72, 77, 83, 88, 94, 100},
+                           {8, 14, 19, 25, 30, 36, 42, 48, 54, 60, 65, 71, 77, 83, 89, 95, 101, 107},
+                           {9, 15, 20, 26, 33, 39, 45, 51, 57, 64, 70, 77, 83, 89, 96, 102, 109, 115},
+                           {9, 16, 22, 28, 35, 41, 48, 55, 61, 68, 75, 82, 88, 95, 102, 109, 116, 123},
+                           {10, 17, 23, 30, 37, 44, 51, 58, 65, 72, 80, 87, 94, 101, 109, 116, 123, 130},
+                           {11, 18, 25, 32, 39, 47, 54, 62, 69, 77, 84, 92, 100, 107, 115, 123, 130, 138}};
+int mann_witney_001[18][18] = {{-1, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 5},
+                               {-1, -1, 0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10},
+                               {-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16},
+                               {-1, 1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 15, 16, 18, 19, 20, 22},
+                               {0, 1, 3, 4, 6, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28},
+                               {0, 2, 4, 6, 7, 9, 11, 13, 15, 17, 20, 22, 24, 26, 28, 30, 32, 34},
+                               {1, 3, 5, 7, 9, 11, 14, 16, 18, 21, 23, 26, 28, 31, 33, 36, 38, 40},
+                               {1, 3, 6, 8, 11, 13, 16, 19, 22, 24, 27, 30, 33, 36, 38, 41, 44, 47},
+                               {1, 4, 7, 9, 12, 15, 18, 22, 25, 28, 31, 34, 37, 41, 44, 47, 50, 53},
+                               {2, 5, 8, 11, 14, 17, 21, 24, 28, 31, 35, 38, 42, 46, 49, 53, 56, 60},
+                               {2, 5, 9, 12, 16, 20, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67},
+                               {2, 6, 10, 13, 17, 22, 26, 30, 34, 38, 43, 47, 51, 56, 60, 65, 69, 73},
+                               {3, 7, 11, 15, 19, 24, 28, 33, 37, 42, 47, 51, 56, 61, 66, 70, 75, 80},
+                               {3, 7, 12, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 82, 87},
+                               {4, 8, 13, 18, 23, 28, 33, 38, 44, 49, 55, 60, 66, 71, 77, 82, 88, 93},
+                               {4, 9, 14, 19, 24, 30, 36, 41, 47, 53, 59, 65, 70, 76, 82, 88, 94, 100},
+                               {4, 9, 15, 20, 26, 32, 38, 44, 50, 56, 63, 69, 75, 82, 88, 94, 101, 107},
+                               {5, 10, 16, 22, 28, 34, 40, 47, 53, 60, 67, 73, 80, 87, 93, 100, 107, 114}};
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -48,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->doubleSpinBox->setMaximum(1000);
     list = new std::list<datavalue>;
     vector = new std::vector<std::list<datavalue>>;
 
@@ -234,10 +272,38 @@ int MainWindow::MannaWhitney()
         msgBox.exec();
         return 0;
     }
+    if (vector->at(0).size() < 3 || vector->at(1).size() < 3)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("2.");
+        msgBox.exec();
+        return 0;
+    }
     std::list<datavalue> first(vector->at(0));
     std::list<datavalue> second(vector->at(1));
     first.merge(second);
     first.sort([](const datavalue &a, const datavalue &b){return a.num < b.num;});
+
+    float summ[2] = {0,0};
+    unsigned int mainIndex = 0;
+    unsigned int sideIndex = 0;
+    for (size_t i = 0; i < vector->size(); i++)
+    {
+        for (auto it = vector->at(i).begin(); it != vector->at(i).end(); ++it)
+        {
+            summ[i] += (*it).num;
+        }
+    }
+    if (summ[0] < summ[1])
+    {
+       mainIndex = (*vector->at(1).begin()).set_number;
+       sideIndex = (*vector->at(0).begin()).set_number;
+    }
+    else
+    {
+       mainIndex = (*vector->at(0).begin()).set_number;
+       sideIndex = (*vector->at(1).begin()).set_number;
+    }
 
     int i (0), k (0);
     float sum (0);
@@ -267,10 +333,44 @@ int MainWindow::MannaWhitney()
         }
     }
 
+    double sumranks[2] = {0,0};
+    unsigned int maincount (0);
+    unsigned int sidecount (0);
     for (auto it = first.begin(); it != first.end(); it++)
     {
-        qDebug() << "value: " << (*it).num << " rank: " << (*it).rank << endl;
+        if ((*it).set_number == mainIndex)
+        {
+            sumranks[0] += (*it).rank;
+            maincount++;
+        }
+        else if ((*it).set_number == sideIndex)
+        {
+            sumranks[1] += (*it).rank;
+            sidecount++;
+        }
     }
+    float U;
+    if (sumranks[0] > sumranks[1])
+    {
+        U = maincount*sidecount + (maincount*(maincount + 1))/2 - sumranks[0];
+    }
+    else
+    {
+        U = maincount*sidecount + (sidecount*(sidecount + 1))/2 - sumranks[1];
+    }
+
+
+    int U_crit_005 = mann_witney_005[maincount-3][sidecount-3];
+    int U_crit_001 = mann_witney_001[maincount-3][sidecount-3];
+
+    QString str;
+    str = QString("U emp %1").arg(U);
+    ui->label_8->setText(str);
+    str = QString("U crit 001 %1").arg(U_crit_001);
+    ui->label_9->setText(str);
+    str = QString("U crit 005 %1").arg(U_crit_005);
+    ui->label_10->setText(str);
+
     return 0;
 }
 
