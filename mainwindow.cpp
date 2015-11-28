@@ -72,6 +72,9 @@ int mann_witney_001[18][18] = {{-1, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4,
                                {4, 9, 15, 20, 26, 32, 38, 44, 50, 56, 63, 69, 75, 82, 88, 94, 101, 107},
                                {5, 10, 16, 22, 28, 34, 40, 47, 53, 60, 67, 73, 80, 87, 93, 100, 107, 114}};
 
+float pirson[2][80] = {{3.842, 5.992, 7.815, 9.488, 11.071, 12.593, 14.068, 15.509, 16.921, 18.309, 19.677, 21.028, 22.365, 23.688, 24.999, 26.299, 27.591, 28.873, 30.147, 31.415, 32.675, 33.929, 35.177, 36.420, 37.658, 38.891, 40.119, 41.343, 42.564, 43.780, 44.993, 46.202, 47.408, 48.610, 49.810, 51.007, 52.201, 53.393, 54.582, 55.768, 56.953, 58.135, 59.314, 60.492, 61.668, 62.841, 64.013, 65.183, 66.351, 67.518, 68.683, 69.846, 71.008, 72.168, 73.326, 74.484, 75.639, 76.794, 77.947, 79.099, 80.232, 81.381, 82.529, 83.675, 84.821, 85.965, 87.108, 88.250, 89.391, 90.531, 91.670, 92.808, 93.945, 95.081, 96.217, 97.351, 99.617, 100.749, 101.879},
+                     {6.635, 9.211, 11.346, 13.278, 15.088, 16.814, 18.478, 20.093, 21.669, 23.213, 24.729, 26.221, 27.693, 29.146, 30.583, 32.006, 33.415, 34.812, 36.198, 37.574, 38.940, 40.298, 41.647, 42.989, 44.324, 45.652, 46.973, 48.289, 49.599, 50.904, 52.203, 53.498, 54.789, 56.074, 57.356, 58.634, 59.907, 61.177, 62.444, 63.707, 64.967, 66.224, 67.477, 68.728, 69.976, 71.221, 72.463, 73.703, 74.940, 76.175, 77.408, 78.638, 79.866, 81.092, 82.316, 83.538, 84.758, 85.976, 87.192, 88.406, 89.591, 90.802, 92.010, 93.217, 94.422, 95.626, 96.828, 98.028, 99.227, 100.425, 101.621, 102.816, 104.010, 105.202, 106.393, 107.582, 109.958, 111.144, 112.329}};
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -85,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->doubleSpinBox->setMaximum(1000);
+    ui->doubleSpinBox->setMaximum(100000);
     list = new std::list<datavalue>;
     vector = new std::vector<std::list<datavalue>>;
 
@@ -361,6 +364,16 @@ int MainWindow::KruskalWallis()
         msgBox.exec();
         return 0;
     }
+    for (size_t i = 0; i < vector->size(); i++)
+    {
+        if (vector->at(i).size() < 3)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("2.");
+            msgBox.exec();
+            return 0;
+        }
+    }
 
     std::vector<std::list<datavalue>> *vec = new std::vector<std::list<datavalue>>(*vector);
     std::list<datavalue> temp;
@@ -385,6 +398,38 @@ int MainWindow::KruskalWallis()
         }
         i++;
     }
+
+    float *ranksSum = new float[vec->size()];
+    float sum (0);
+    for (size_t i = 0; i < vec->size(); i++)
+    {
+        for (auto it = vec->at(i).begin(); it != vec->at(i).end(); it++)
+        {
+            sum += it->rank;
+        }
+        ranksSum[i] = sum;
+        sum = 0;
+    }
+
+    float partialSum (0);
+    for (size_t i = 0; i < vec->size(); i++)
+    {
+        partialSum += ranksSum[i]*ranksSum[i]/vec->at(i).size();
+    }
+
+    float H_criteria = (12.0f/(temp.size()*(temp.size()+1)))*partialSum - 3*(temp.size()+1);
+    float H_005 = pirson[0][vec->size()-2];
+    float H_001 = pirson[1][vec->size()-2];
+
+    QString str;
+    str = QString("H emp %1").arg(H_criteria);
+    ui->label_11->setText(str);
+    str = QString("H_005 %1").arg(H_005);
+    ui->label_12->setText(str);
+    str = QString("H_001 %1").arg(H_001);
+    ui->label_13->setText(str);
+    delete [] ranksSum;
+    delete vec;
     return 0;
 
 }
