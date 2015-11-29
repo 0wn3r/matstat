@@ -585,7 +585,7 @@ int MainWindow::Jonkir()
     }
     unsigned int maxJonkirSum = vec->size() * (vec->size() - 1) / 2 * vec->at(0).size() * vec->at(0).size();
 
-    unsigned int S_emp = 2 * jonkirSum - maxJonkirSum;
+    int S_emp = 2 * jonkirSum - maxJonkirSum;
     int S_005 = jonkir_005[vec->size()-2][vec->at(0).size()-3];
     int S_001 = jonkir_001[vec->size()-2][vec->at(0).size()-3];
 
