@@ -112,9 +112,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->doubleSpinBox->setMaximum(100000);
+    ui->doubleSpinBox->clear();
+    ui->doubleSpinBox->setFocus();
     list = new std::list<datavalue>;
     vector = new std::vector<std::list<datavalue>>;
-
 }
 
 MainWindow::~MainWindow()
@@ -161,7 +162,7 @@ void MainWindow::on_listWidget_itemChanged(QListWidgetItem *item)
     if (item->isSelected())
     {
         auto it = std::next(list->begin(), ui->listWidget->currentRow());
-        (*it).num = item->text().toFloat();
+        it->num = item->text().toFloat();
     }
 }
 
@@ -196,6 +197,7 @@ void MainWindow::on_pushButton_pressed()
     }
     list->clear();
     ui->listWidget->clear();
+    ui->doubleSpinBox->setFocus();
     global_counter++;
 }
 
@@ -242,7 +244,7 @@ int MainWindow::RosenbaumCriteria()
     {
         for (auto it = vector->at(i).begin(); it != vector->at(i).end(); ++it)
         {
-            sum[i] += (*it).num;
+            sum[i] += it->num;
         }
     }
     if (sum[0] < sum[1])
@@ -266,20 +268,12 @@ int MainWindow::RosenbaumCriteria()
         Q005 = rosenbaum_p005[vector->at(0).size() - 11][vector->at(1).size() - 11];
     }
     QString str;
-    str = QString("maxFromSideSet %1").arg(maxFromSideSet);
-    ui->label->setText(str);
-    str = QString("S1 %1").arg(S1);
-    ui->label_2->setText(str);
-    str = QString("minFromMainSet %1").arg(minFromMainSet);
-    ui->label_3->setText(str);
-    str = QString("S2 %1").arg(S2);
-    ui->label_4->setText(str);
-    str = QString("Q %1").arg(Q);
-    ui->label_5->setText(str);
-    str = QString("Q005 %1").arg(Q005);
-    ui->label_6->setText(str);
-    str = QString("Q001 %1").arg(Q001);
-    ui->label_7->setText(str);
+    str = QString("%1").arg(Q);
+    ui->lineEdit->setText(str);
+    str = QString("%1").arg(Q005);
+    ui->lineEdit_2->setText(str);
+    str = QString("%1").arg(Q001);
+    ui->lineEdit_3->setText(str);
 
     return 1;
 }
@@ -305,6 +299,13 @@ int MainWindow::MannWhitney()
         msgBox.exec();
         return 0;
     }
+    if (vector->at(0).size() > 20 || vector->at(1).size() > 20)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("3.");
+        msgBox.exec();
+        return 0;
+    }
     std::list<datavalue> first(vector->at(0));
     std::list<datavalue> second(vector->at(1));
     first.merge(second);
@@ -316,7 +317,7 @@ int MainWindow::MannWhitney()
     {
         for (auto it = vector->at(i).begin(); it != vector->at(i).end(); ++it)
         {
-            summ[i] += (*it).num;
+            summ[i] += it->num;
         }
     }
     if (summ[0] < summ[1])
@@ -337,14 +338,14 @@ int MainWindow::MannWhitney()
     unsigned int sidecount (0);
     for (auto it = first.begin(); it != first.end(); it++)
     {
-        if ((*it).set_number == mainIndex)
+        if (it->set_number == mainIndex)
         {
-            sumranks[0] += (*it).rank;
+            sumranks[0] += it->rank;
             maincount++;
         }
         else if ((*it).set_number == sideIndex)
         {
-            sumranks[1] += (*it).rank;
+            sumranks[1] += it->rank;
             sidecount++;
         }
     }
@@ -363,12 +364,12 @@ int MainWindow::MannWhitney()
     int U_crit_001 = mann_witney_001[maincount-3][sidecount-3];
 
     QString str;
-    str = QString("U emp %1").arg(U);
-    ui->label_8->setText(str);
-    str = QString("U crit 001 %1").arg(U_crit_001);
-    ui->label_9->setText(str);
-    str = QString("U crit 005 %1").arg(U_crit_005);
-    ui->label_10->setText(str);
+    str = QString("%1").arg(U);
+    ui->lineEdit_4->setText(str);
+    str = QString("%1").arg(U_crit_001);
+    ui->lineEdit_5->setText(str);
+    str = QString("%1").arg(U_crit_005);
+    ui->lineEdit_6->setText(str);
 
     return 0;
 }
@@ -445,12 +446,12 @@ int MainWindow::KruskalWallis()
     float H_001 = pirson[1][vec->size()-2];
 
     QString str;
-    str = QString("H emp %1").arg(H_criteria);
-    ui->label_11->setText(str);
-    str = QString("H_005 %1").arg(H_005);
-    ui->label_12->setText(str);
-    str = QString("H_001 %1").arg(H_001);
-    ui->label_13->setText(str);
+    str = QString("%1").arg(H_criteria);
+    ui->lineEdit_7->setText(str);
+    str = QString("%1").arg(H_005);
+    ui->lineEdit_8->setText(str);
+    str = QString("%1").arg(H_001);
+    ui->lineEdit_9->setText(str);
     delete [] ranksSum;
     delete vec;
     return 0;
@@ -522,13 +523,12 @@ int MainWindow::Jonkir()
     int S_001 = jonkir_001[vec->size()-2][vec->at(0).size()-3];
 
     QString str;
-    str = QString("S emp %1").arg(S_emp);
-    ui->label_14->setText(str);
-    str = QString("S_005 %1").arg(S_005);
-    ui->label_15->setText(str);
-    str = QString("S_001 %1").arg(S_001);
-    ui->label_16->setText(str);
-
+    str = QString("%1").arg(S_emp);
+    ui->lineEdit_10->setText(str);
+    str = QString("%1").arg(S_005);
+    ui->lineEdit_11->setText(str);
+    str = QString("%1").arg(S_001);
+    ui->lineEdit_12->setText(str);
 
     delete vec;
     return 0;
@@ -541,31 +541,32 @@ void MainWindow::on_pushButton_5_pressed()
 
 void MainWindow::RangeValues(std::list<datavalue> &list)
 {
-    int i (0), k (0);
+    int i (0), k (1);
     float sum (0);
     for (auto it = list.begin(); it != list.end(); it++)
     {
         i++;
-        if (it != list.end() && (*it).num == (*(std::next(it, 1))).num)
+        if (it != list.end() && it->num == std::next(it, 1)->num)
         {
             k++;
         }
-        else if ((it == list.end() || (*it).num != (*(std::next(it, 1))).num) && k != 0)
+        else if (k != 1 && (it == list.end() || it->num != std::next(it, 1)->num))
         {
-            for (int j = 0; j <= k; j++)
+            for (int j = 0; j < k; j++)
             {
                 sum += i-j;
             }
-            sum /= static_cast<float>(k+1);
-            for (int j = 0; j <= k; j++)
+            sum /= k;
+            for (int j = 0; j < k; j++)
             {
-                (*std::prev(it, j)).rank = sum;
+                std::prev(it, j)->rank = sum;
             }
-            k = sum = 0;
+            sum = 0;
+            k = 1;
         }
         else
         {
-            (*it).rank = i;
+            it->rank = i;
         }
     }
 }
