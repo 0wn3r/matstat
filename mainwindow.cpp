@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-int rosenbaum_p005[16][16] = {{6, 6, 6, 7, 7, 8, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8},
+const short rosenbaum_p005[16][16] = {{6, 6, 6, 7, 7, 8, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8},
                               {6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8},
                               {6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8},
                               {7, 7, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8},
@@ -18,7 +18,7 @@ int rosenbaum_p005[16][16] = {{6, 6, 6, 7, 7, 8, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8},
                               {8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7},
                               {8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7}};
 
-int rosenbaum_p001[16][16] = {{9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12, 12, 12},
+const short rosenbaum_p001[16][16] = {{9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12, 12, 12},
                               {9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 12},
                               {9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 11, 11, 11},
                               {9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 11},
@@ -35,7 +35,7 @@ int rosenbaum_p001[16][16] = {{9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12,
                               {12, 11, 11, 10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9},
                               {12, 12, 11, 11, 10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9}};
 
-int mann_witney_005[18][18] = {{0, 0, 1, 2, 2, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10, 11},
+const short mann_witney_005[18][18] = {{0, 0, 1, 2, 2, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10, 11},
                            {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18},
                            {1, 2, 4, 5, 6, 8, 9, 11, 12, 13, 15, 16, 18, 19, 20, 22, 23, 25},
                            {2, 3, 5, 7, 8, 10, 12, 14, 16, 17, 19, 21, 23, 25, 26, 28, 30, 32},
@@ -53,7 +53,7 @@ int mann_witney_005[18][18] = {{0, 0, 1, 2, 2, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 9, 
                            {9, 16, 22, 28, 35, 41, 48, 55, 61, 68, 75, 82, 88, 95, 102, 109, 116, 123},
                            {10, 17, 23, 30, 37, 44, 51, 58, 65, 72, 80, 87, 94, 101, 109, 116, 123, 130},
                            {11, 18, 25, 32, 39, 47, 54, 62, 69, 77, 84, 92, 100, 107, 115, 123, 130, 138}};
-int mann_witney_001[18][18] = {{-1, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 5},
+const short mann_witney_001[18][18] = {{-1, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 5},
                                {-1, -1, 0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10},
                                {-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16},
                                {-1, 1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 15, 16, 18, 19, 20, 22},
@@ -72,8 +72,31 @@ int mann_witney_001[18][18] = {{-1, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4,
                                {4, 9, 15, 20, 26, 32, 38, 44, 50, 56, 63, 69, 75, 82, 88, 94, 101, 107},
                                {5, 10, 16, 22, 28, 34, 40, 47, 53, 60, 67, 73, 80, 87, 93, 100, 107, 114}};
 
-float pirson[2][80] = {{3.842, 5.992, 7.815, 9.488, 11.071, 12.593, 14.068, 15.509, 16.921, 18.309, 19.677, 21.028, 22.365, 23.688, 24.999, 26.299, 27.591, 28.873, 30.147, 31.415, 32.675, 33.929, 35.177, 36.420, 37.658, 38.891, 40.119, 41.343, 42.564, 43.780, 44.993, 46.202, 47.408, 48.610, 49.810, 51.007, 52.201, 53.393, 54.582, 55.768, 56.953, 58.135, 59.314, 60.492, 61.668, 62.841, 64.013, 65.183, 66.351, 67.518, 68.683, 69.846, 71.008, 72.168, 73.326, 74.484, 75.639, 76.794, 77.947, 79.099, 80.232, 81.381, 82.529, 83.675, 84.821, 85.965, 87.108, 88.250, 89.391, 90.531, 91.670, 92.808, 93.945, 95.081, 96.217, 97.351, 99.617, 100.749, 101.879},
+const float pirson[2][80] = {{3.842, 5.992, 7.815, 9.488, 11.071, 12.593, 14.068, 15.509, 16.921, 18.309, 19.677, 21.028, 22.365, 23.688, 24.999, 26.299, 27.591, 28.873, 30.147, 31.415, 32.675, 33.929, 35.177, 36.420, 37.658, 38.891, 40.119, 41.343, 42.564, 43.780, 44.993, 46.202, 47.408, 48.610, 49.810, 51.007, 52.201, 53.393, 54.582, 55.768, 56.953, 58.135, 59.314, 60.492, 61.668, 62.841, 64.013, 65.183, 66.351, 67.518, 68.683, 69.846, 71.008, 72.168, 73.326, 74.484, 75.639, 76.794, 77.947, 79.099, 80.232, 81.381, 82.529, 83.675, 84.821, 85.965, 87.108, 88.250, 89.391, 90.531, 91.670, 92.808, 93.945, 95.081, 96.217, 97.351, 99.617, 100.749, 101.879},
                      {6.635, 9.211, 11.346, 13.278, 15.088, 16.814, 18.478, 20.093, 21.669, 23.213, 24.729, 26.221, 27.693, 29.146, 30.583, 32.006, 33.415, 34.812, 36.198, 37.574, 38.940, 40.298, 41.647, 42.989, 44.324, 45.652, 46.973, 48.289, 49.599, 50.904, 52.203, 53.498, 54.789, 56.074, 57.356, 58.634, 59.907, 61.177, 62.444, 63.707, 64.967, 66.224, 67.477, 68.728, 69.976, 71.221, 72.463, 73.703, 74.940, 76.175, 77.408, 78.638, 79.866, 81.092, 82.316, 83.538, 84.758, 85.976, 87.192, 88.406, 89.591, 90.802, 92.010, 93.217, 94.422, 95.626, 96.828, 98.028, 99.227, 100.425, 101.621, 102.816, 104.010, 105.202, 106.393, 107.582, 109.958, 111.144, 112.329}};
+
+const short jonkir_005[4][9] = {{10, 17, 24, 33, 42, 53, 64, 76, 88},
+                             {14, 26, 38, 51, 66, 82, 100, 118, 138},
+                             {20, 34, 51, 71, 92, 115, 140, 166, 194},
+                             {26, 44, 67, 93, 121, 151, 184, 219, 256}};
+const short jonkir_001[4][9] = {{-1, 23, 32, 45, 59, 74, 90, 106, 124},
+                              {20, 34, 50, 71, 92, 115, 140, 167, 195},
+                              {26, 48, 72, 99, 129, 162, 197, 234, 274},
+                              {34, 62, 94, 130, 170, 213, 260, 309, 361}};
+
+bool compareVec(const std::list<datavalue> &a, const std::list<datavalue> &b)
+{
+    float sumA (0), sumB (0);
+    for (auto it = a.begin(); it != a.end(); ++it)
+    {
+        sumA += it->num;
+    }
+    for (auto it = b.begin(); it != b.end(); ++it)
+    {
+        sumB += it->num;
+    }
+    return sumA < sumB;
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -147,7 +170,7 @@ void MainWindow::on_doubleSpinBox_editingFinished()
     if (ui->doubleSpinBox->cleanText() == "")
         return;
     ui->listWidget->addItem(ui->doubleSpinBox->cleanText());
-    datavalue temp = { ui->doubleSpinBox->value(), global_counter, 0};
+    datavalue temp = { ui->doubleSpinBox->value(), global_counter, 0, 0};
     list->push_back(temp);
     ui->doubleSpinBox->clear();
     for (int i = 0; i < ui->listWidget->count(); i++) {
@@ -357,7 +380,7 @@ void MainWindow::on_pushButton_3_pressed()
 
 int MainWindow::KruskalWallis()
 {
-    if (vector->size() < 2)
+    if (vector->size() < 3)
     {
         QMessageBox msgBox;
         msgBox.setText("1.");
@@ -403,7 +426,7 @@ int MainWindow::KruskalWallis()
     float sum (0);
     for (size_t i = 0; i < vec->size(); i++)
     {
-        for (auto it = vec->at(i).begin(); it != vec->at(i).end(); it++)
+        for (auto it = vec->at(i).begin(); it != vec->at(i).end(); ++it)
         {
             sum += it->rank;
         }
@@ -437,6 +460,83 @@ int MainWindow::KruskalWallis()
 void MainWindow::on_pushButton_4_pressed()
 {
     KruskalWallis();
+}
+
+int MainWindow::Jonkir()
+{
+    if (vector->size() < 3)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("1.");
+        msgBox.exec();
+        return 0;
+    }
+
+    std::vector<std::list<datavalue>> * vec = new std::vector<std::list<datavalue>> (*vector);
+    size_t min = vec->at(0).size();
+    for (size_t i = 0; i < vec->size(); i++)
+    {
+        min = std::min(min, vec->at(i).size());
+    }
+    std::default_random_engine generator;
+    for (size_t i = 0; i < vec->size(); i++)
+    {
+        size_t diff = vec->at(i).size() - min;
+        for (size_t j = 0; j < diff; j++)
+        {
+            std::uniform_int_distribution<int> distribution(0, vec->at(i).size());
+            vec->at(i).erase(std::next(vec->at(i).begin(), distribution(generator)));
+        }
+    }
+
+    std::sort(vec->begin(), vec->end(), compareVec);
+    for (size_t i = 0; i < vec->size() - 1; i++)
+    {
+        for (auto it1 = vec->at(i).begin(); it1 != vec->at(i).end(); ++it1)
+        {
+            for (size_t j = i + 1; j < vec->size(); j++)
+            {
+                for (auto it2 = vec->at(j).begin(); it2 != vec->at(j).end(); ++it2)
+                {
+                    if(it2->num > it1->num)
+                    {
+                        it1->jonkir_count++;
+                    }
+                }
+            }
+        }
+    }
+
+    unsigned int jonkirSum (0);
+    for (size_t i = 0; i < vec->size() - 1; i++)
+    {
+        for (auto it = vec->at(i).begin(); it != vec->at(i).end(); it++)
+        {
+            jonkirSum += it->jonkir_count;
+        }
+    }
+    unsigned int maxJonkirSum = vec->size() * (vec->size() - 1) / 2 * vec->at(0).size() * vec->at(0).size();
+
+    unsigned int S_emp = 2 * jonkirSum - maxJonkirSum;
+    int S_005 = jonkir_005[vec->size()-2][vec->at(0).size()-3];
+    int S_001 = jonkir_001[vec->size()-2][vec->at(0).size()-3];
+
+    QString str;
+    str = QString("S emp %1").arg(S_emp);
+    ui->label_14->setText(str);
+    str = QString("S_005 %1").arg(S_005);
+    ui->label_15->setText(str);
+    str = QString("S_001 %1").arg(S_001);
+    ui->label_16->setText(str);
+
+
+    delete vec;
+    return 0;
+}
+
+void MainWindow::on_pushButton_5_pressed()
+{
+    Jonkir();
 }
 
 void MainWindow::RangeValues(std::list<datavalue> &list)

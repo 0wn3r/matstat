@@ -10,13 +10,15 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <random>
 #include <QtDebug>
 
 struct datavalue
 {
     double num;
-    unsigned int set_number;
+    unsigned short set_number;
     float rank;
+    unsigned short jonkir_count;
     bool operator < (const datavalue &a)
     {
         return num < a.num;
@@ -38,6 +40,7 @@ public:
     int RosenbaumCriteria();
     int MannWhitney();
     int KruskalWallis();
+    int Jonkir();
 
 private slots:
     void on_listWidget_itemChanged(QListWidgetItem *item);
@@ -52,13 +55,15 @@ private slots:
 
     void on_pushButton_4_pressed();
 
+    void on_pushButton_5_pressed();
+
 protected:
     bool eventFilter(QObject *target, QEvent *event);
 private:
     Ui::MainWindow *ui;
     std::list<datavalue> *list;
     std::vector<std::list<datavalue>> *vector;
-    unsigned int global_counter = 0;
+    unsigned short global_counter = 0;
 };
 
 #endif // MAINWINDOW_H
