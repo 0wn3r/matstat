@@ -274,7 +274,20 @@ int MainWindow::RosenbaumCriteria()
     ui->lineEdit_2->setText(str);
     str = QString("%1").arg(Q001);
     ui->lineEdit_3->setText(str);
+    if (Q >= Q001)
+    {
+        str = "Нульова гіпотеза відкидається з достовірністю (p<0.01).";
+    }
+    else if (Q >= Q005)
+    {
+        str = "Нульова гіпотеза відкидається з достовірністю (p<0.05).";
+    }
+    else
+    {
+        str = "Нульова гіпотеза приймається.";
+    }
 
+    ui->textEdit->setText(str);
     return 1;
 }
 
@@ -371,6 +384,21 @@ int MainWindow::MannWhitney()
     str = QString("%1").arg(U_crit_005);
     ui->lineEdit_6->setText(str);
 
+    if (U <= U_crit_001 && U_crit_001 != -1)
+    {
+        str = "Нульова гіпотеза відкидається з достовірністю (p<0.01).";
+    }
+    else if (U <= U_crit_005)
+    {
+        str = "Нульова гіпотеза відкидається з достовірністю (p<0.05).";
+    }
+    else
+    {
+        str = "Нульова гіпотеза приймається.";
+    }
+
+    ui->textEdit_2->setText(str);
+
     return 0;
 }
 
@@ -451,6 +479,21 @@ int MainWindow::KruskalWallis()
     ui->lineEdit_8->setText(str);
     str = QString("%1").arg(H_001);
     ui->lineEdit_9->setText(str);
+
+    if (H_criteria >= H_001)
+    {
+        str = "Нульова гіпотеза відкидається з достовірністю (p<0.01).";
+    }
+    else if (H_criteria >= H_005)
+    {
+        str = "Нульова гіпотеза відкидається з достовірністю (p<0.05).";
+    }
+    else
+    {
+        str = "Нульова гіпотеза приймається.";
+    }
+
+    ui->textEdit_3->setText(str);
     delete [] ranksSum;
     delete vec;
 
@@ -553,6 +596,22 @@ int MainWindow::Jonkir()
     ui->lineEdit_11->setText(str);
     str = QString("%1").arg(S_001);
     ui->lineEdit_12->setText(str);
+
+    if (S_emp >= S_001)
+    {
+        str = "Нульова гіпотеза відкидається з достовірністю (p<0.01).";
+    }
+    else if (S_emp >= S_005)
+    {
+        str = "Нульова гіпотеза відкидається з достовірністю (p<0.05).";
+    }
+    else
+    {
+        str = "Нульова гіпотеза приймається.";
+    }
+
+    ui->textEdit_4->setText(str);
+
     delete vec;
 
     return 0;
