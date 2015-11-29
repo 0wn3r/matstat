@@ -87,13 +87,13 @@ const short jonkir_001[4][9] = {{-1, 23, 32, 45, 59, 74, 90, 106, 124},
 bool compareVec(const std::list<datavalue> &a, const std::list<datavalue> &b)
 {
     float sumA (0), sumB (0);
-    for (auto it = a.begin(); it != a.end(); ++it)
+    for (auto x : a)
     {
-        sumA += it->num;
+        sumA += x.num;
     }
-    for (auto it = b.begin(); it != b.end(); ++it)
+    for (auto x : b)
     {
-        sumB += it->num;
+        sumB += x.num;
     }
     return sumA < sumB;
 }
@@ -242,18 +242,18 @@ int MainWindow::RosenbaumCriteria()
     int mainIndex = 0;
     for (size_t i = 0; i < vector->size(); i++)
     {
-        for (auto it = vector->at(i).begin(); it != vector->at(i).end(); ++it)
+        for (auto x : vector->at(i))
         {
-            sum[i] += it->num;
+            sum[i] += x.num;
         }
     }
     if (sum[0] < sum[1])
     {
        mainIndex = 1;
     }
-    double maxFromSideSet = (*std::max_element(vector->at(!mainIndex).begin(), vector->at(!mainIndex).end(), [](const datavalue &a, const datavalue &b){return a.num < b.num;})).num;
+    double maxFromSideSet = std::max_element(vector->at(!mainIndex).begin(), vector->at(!mainIndex).end(), [](const datavalue &a, const datavalue &b){return a.num < b.num;})->num;
     int S1 = count_if(vector->at(mainIndex).begin(), vector->at(mainIndex).end(), [maxFromSideSet](const datavalue &a){return a.num > maxFromSideSet;});
-    double minFromMainSet = (*std::min_element(vector->at(mainIndex).begin(), vector->at(mainIndex).end(), [](const datavalue &a, const datavalue &b){return a.num < b.num;})).num;
+    double minFromMainSet = std::min_element(vector->at(mainIndex).begin(), vector->at(mainIndex).end(), [](const datavalue &a, const datavalue &b){return a.num < b.num;})->num;
     int S2 = count_if(vector->at(!mainIndex).begin(), vector->at(!mainIndex).end(), [minFromMainSet](const datavalue &a){return a.num < minFromMainSet;});
     int Q = S1 + S2;
     int Q001, Q005;
@@ -315,20 +315,20 @@ int MainWindow::MannWhitney()
     unsigned int sideIndex = 0;
     for (size_t i = 0; i < vector->size(); i++)
     {
-        for (auto it = vector->at(i).begin(); it != vector->at(i).end(); ++it)
+        for (auto x : vector->at(i))
         {
-            summ[i] += it->num;
+            summ[i] += x.num;
         }
     }
     if (summ[0] < summ[1])
     {
-       mainIndex = (*vector->at(1).begin()).set_number;
-       sideIndex = (*vector->at(0).begin()).set_number;
+       mainIndex = vector->at(1).begin()->set_number;
+       sideIndex = vector->at(0).begin()->set_number;
     }
     else
     {
-       mainIndex = (*vector->at(0).begin()).set_number;
-       sideIndex = (*vector->at(1).begin()).set_number;
+       mainIndex = vector->at(0).begin()->set_number;
+       sideIndex = vector->at(1).begin()->set_number;
     }
 
     RangeValues(first);
@@ -336,16 +336,16 @@ int MainWindow::MannWhitney()
     double sumranks[2] = {0,0};
     unsigned int maincount (0);
     unsigned int sidecount (0);
-    for (auto it = first.begin(); it != first.end(); it++)
+    for (auto x : first)
     {
-        if (it->set_number == mainIndex)
+        if (x.set_number == mainIndex)
         {
-            sumranks[0] += it->rank;
+            sumranks[0] += x.rank;
             maincount++;
         }
-        else if ((*it).set_number == sideIndex)
+        else if (x.set_number == sideIndex)
         {
-            sumranks[1] += it->rank;
+            sumranks[1] += x.rank;
             sidecount++;
         }
     }
@@ -427,9 +427,9 @@ int MainWindow::KruskalWallis()
     float sum (0);
     for (size_t i = 0; i < vec->size(); i++)
     {
-        for (auto it = vec->at(i).begin(); it != vec->at(i).end(); ++it)
+        for (auto x : vec->at(i))
         {
-            sum += it->rank;
+            sum += x.rank;
         }
         ranksSum[i] = sum;
         sum = 0;
@@ -493,15 +493,15 @@ int MainWindow::Jonkir()
     std::sort(vec->begin(), vec->end(), compareVec);
     for (size_t i = 0; i < vec->size() - 1; i++)
     {
-        for (auto it1 = vec->at(i).begin(); it1 != vec->at(i).end(); ++it1)
+        for (auto &x : vec->at(i))
         {
             for (size_t j = i + 1; j < vec->size(); j++)
             {
-                for (auto it2 = vec->at(j).begin(); it2 != vec->at(j).end(); ++it2)
+                for (auto y : vec->at(j))
                 {
-                    if(it2->num > it1->num)
+                    if (y.num > x.num)
                     {
-                        it1->jonkir_count++;
+                        x.jonkir_count++;
                     }
                 }
             }
@@ -511,9 +511,9 @@ int MainWindow::Jonkir()
     unsigned int jonkirSum (0);
     for (size_t i = 0; i < vec->size() - 1; i++)
     {
-        for (auto it = vec->at(i).begin(); it != vec->at(i).end(); it++)
+        for (auto x : vec->at(i))
         {
-            jonkirSum += it->jonkir_count;
+            jonkirSum += x.jonkir_count;
         }
     }
     unsigned int maxJonkirSum = vec->size() * (vec->size() - 1) / 2 * vec->at(0).size() * vec->at(0).size();
