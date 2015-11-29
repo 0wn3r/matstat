@@ -32,7 +32,7 @@
 }</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <property name="enabled">
@@ -219,6 +219,9 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_3">
       <property name="geometry">
@@ -227,6 +230,19 @@
         <y>50</y>
         <width>161</width>
         <height>20</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="textEdit">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>100</y>
+        <width>231</width>
+        <height>71</height>
        </rect>
       </property>
      </widget>
@@ -283,6 +299,9 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLabel" name="label_9">
       <property name="geometry">
@@ -318,6 +337,9 @@
         <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -373,6 +395,9 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLabel" name="label_12">
       <property name="geometry">
@@ -408,6 +433,9 @@
         <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -463,6 +491,9 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_12">
       <property name="geometry">
@@ -472,6 +503,9 @@
         <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QLabel" name="label_15">

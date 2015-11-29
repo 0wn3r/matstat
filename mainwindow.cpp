@@ -206,35 +206,35 @@ int MainWindow::RosenbaumCriteria()
     if (vector->size() != 2)
     {
         QMessageBox msgBox;
-        msgBox.setText("1.");
+        msgBox.setText("Кількість наборів повинна дорівнювати 2.");
         msgBox.exec();
         return 0;
     }
     if (vector->at(0).size() < 11 || vector->at(1).size() < 11)
     {
         QMessageBox msgBox;
-        msgBox.setText("2.");
+        msgBox.setText("Мінімальна кількість значень у наборах - 11.");
         msgBox.exec();
         return 0;
     }
     if (vector->at(0).size() <= 50 && vector->at(1).size() <= 50 && abs(vector->at(0).size() - vector->at(1).size()) > 10)
     {
         QMessageBox msgBox;
-        msgBox.setText("3.");
+        msgBox.setText("Різниця в кількості значень між наборами сильно велика.");
         msgBox.exec();
         return 0;
     }
     if (vector->at(0).size() > 50 && vector->at(0).size() <= 100 && vector->at(1).size() > 50 && vector->at(1).size() <= 100 && abs(vector->at(0).size() - vector->at(1).size()) > 20)
     {
         QMessageBox msgBox;
-        msgBox.setText("4.");
+        msgBox.setText("Різниця в кількості значень між наборами сильно велика.");
         msgBox.exec();
         return 0;
     }
     if (vector->at(0).size() > 100 && vector->at(1).size() > 100 && ((float)vector->at(0).size() / (float)vector->at(1).size() < 0.5 || (float)vector->at(0).size() / (float)vector->at(1).size() > 2.0))
     {
         QMessageBox msgBox;
-        msgBox.setText("5.");
+        msgBox.setText("Різниця в кількості значень між наборами сильно велика.");
         msgBox.exec();
         return 0;
     }
@@ -288,21 +288,21 @@ int MainWindow::MannWhitney()
     if (vector->size() != 2)
     {
         QMessageBox msgBox;
-        msgBox.setText("1.");
+        msgBox.setText("Кількість наборів повинна дорівнювати 2.");
         msgBox.exec();
         return 0;
     }
     if (vector->at(0).size() < 3 || vector->at(1).size() < 3)
     {
         QMessageBox msgBox;
-        msgBox.setText("2.");
+        msgBox.setText("Мінімальна кількість значень у наборах - 3.");
         msgBox.exec();
         return 0;
     }
     if (vector->at(0).size() > 20 || vector->at(1).size() > 20)
     {
         QMessageBox msgBox;
-        msgBox.setText("3.");
+        msgBox.setText("Максимальна кількість значень у наборах - 20.");
         msgBox.exec();
         return 0;
     }
@@ -384,7 +384,7 @@ int MainWindow::KruskalWallis()
     if (vector->size() < 3)
     {
         QMessageBox msgBox;
-        msgBox.setText("1.");
+        msgBox.setText("Кількість наборів повинна бути не менше 3.");
         msgBox.exec();
         return 0;
     }
@@ -393,7 +393,7 @@ int MainWindow::KruskalWallis()
         if (vector->at(i).size() < 3)
         {
             QMessageBox msgBox;
-            msgBox.setText("2.");
+            msgBox.setText("Мінімальна кількість значень у наборах - 3");
             msgBox.exec();
             return 0;
         }
@@ -414,7 +414,6 @@ int MainWindow::KruskalWallis()
     {
         if (it->set_number != std::next(it, 1)->set_number || it == temp.end())
         {
-
             std::list<datavalue> temp(std::prev(it, i), std::next(it, 1));
             vec->push_back(temp);
             i = 0;
@@ -454,8 +453,8 @@ int MainWindow::KruskalWallis()
     ui->lineEdit_9->setText(str);
     delete [] ranksSum;
     delete vec;
-    return 0;
 
+    return 0;
 }
 
 void MainWindow::on_pushButton_4_pressed()
@@ -468,9 +467,34 @@ int MainWindow::Jonkir()
     if (vector->size() < 3)
     {
         QMessageBox msgBox;
-        msgBox.setText("1.");
+        msgBox.setText("Кількість наборів повинна бути не менше 3.");
         msgBox.exec();
         return 0;
+    }
+    if (vector->size() > 6)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Кількість наборів повинна бути не більше 6.");
+        msgBox.exec();
+        return 0;
+    }
+
+    for (size_t i = 0; i < vector->size(); i++)
+    {
+        if (vector->at(i).size() < 2)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Мінімальна кількість значень у наборах - 2");
+            msgBox.exec();
+            return 0;
+        }
+        if (vector->at(i).size() > 10)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Максимальна кількість значень у наборах - 10");
+            msgBox.exec();
+            return 0;
+        }
     }
 
     std::vector<std::list<datavalue>> * vec = new std::vector<std::list<datavalue>> (*vector);
@@ -529,8 +553,8 @@ int MainWindow::Jonkir()
     ui->lineEdit_11->setText(str);
     str = QString("%1").arg(S_001);
     ui->lineEdit_12->setText(str);
-
     delete vec;
+
     return 0;
 }
 
