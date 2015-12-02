@@ -2,28 +2,21 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QStringListModel>
 #include <QKeyEvent>
 #include <QListWidgetItem>
 #include <QDesktopWidget>
 #include <QMessageBox>
+#include <QFileDialog>
 #include <list>
 #include <vector>
+#include <array>
 #include <algorithm>
 #include <random>
+#include <utility>
+#include "boost/filesystem/fstream.hpp"
 #include <QtDebug>
+#include "readcsv.h"
 
-struct datavalue
-{
-    double num;
-    unsigned short set_number;
-    float rank;
-    unsigned short jonkir_count;
-    bool operator < (const datavalue &a)
-    {
-        return num < a.num;
-    }
-};
 
 namespace Ui {
 class MainWindow;
@@ -36,11 +29,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void InitializeListWidget(std::vector<std::list<datavalue>> *vec);
     void RangeValues(std::list<datavalue> &list);
     int RosenbaumCriteria();
     int MannWhitney();
     int KruskalWallis();
     int Jonkir();
+    int Pirson();
 
 private slots:
     void on_listWidget_itemChanged(QListWidgetItem *item);
@@ -56,6 +51,10 @@ private slots:
     void on_pushButton_4_pressed();
 
     void on_pushButton_5_pressed();
+
+    void on_pushButton_6_pressed();
+
+    void on_pushButton_7_pressed();
 
 protected:
     bool eventFilter(QObject *target, QEvent *event);

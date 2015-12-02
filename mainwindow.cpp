@@ -114,6 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->doubleSpinBox->setMaximum(100000);
     ui->doubleSpinBox->clear();
     ui->doubleSpinBox->setFocus();
+    ui->radioButton->setChecked(true);
     list = new std::list<datavalue>;
     vector = new std::vector<std::list<datavalue>>;
 }
@@ -185,16 +186,7 @@ void MainWindow::on_pushButton_pressed()
         return;
     list->sort([](const datavalue &a, const datavalue &b){return a.num < b.num;});
     vector->push_back(*list);
-    if (list->size() > static_cast<size_t>(ui->tableWidget->columnCount()) || vector->size() == 1)
-    {
-        ui->tableWidget->setColumnCount(list->size());
-    }
-    ui->tableWidget->setRowCount(vector->size());
-    for (auto it = list->begin(); it != list->end(); ++it)
-    {
-        QString str = QString("%1").arg((*it).num);
-        ui->tableWidget->setItem(vector->size()-1, std::distance(list->begin(), it), new QTableWidgetItem(str));
-    }
+    InitializeListWidget(vector);
     list->clear();
     ui->listWidget->clear();
     ui->doubleSpinBox->setFocus();
@@ -622,6 +614,73 @@ void MainWindow::on_pushButton_5_pressed()
     Jonkir();
 }
 
+int MainWindow::Pirson()
+{
+    std::vector<std::list<datavalue>> * vec = new std::vector<std::list<datavalue>> (*vector);
+    std::vector<std::list<std::pair<float, int>>> frequencies;
+
+    for (auto &x : *vec)
+    {
+        std::list<std::pair<float, int>> temp;
+        while (x.size() != 0)
+        {
+            int count = 0;
+            for (auto y : x)
+            {
+                 if (y.num == x.front().num)
+                 {
+                     count++;
+                 }
+                 if (y.num != x.front().num)
+                 {
+                     break;
+                 }
+            }
+            std::pair<float, int> temp1(x.front().num, count);
+            x.erase(x.begin(), std::next(x.begin(), count));
+            temp.push_back(temp1);
+        }
+        frequencies.push_back(temp);
+    }
+    delete vec;
+    std::vector<int> countOfValues(frequencies.size(), 0);
+    std::vector<float> theoreticalFreq(frequencies.size());
+    if (ui->radioButton->isChecked())
+    {
+        for (auto y : frequencies.at(0))
+        {
+            countOfValues[0] += y.second;
+        }
+
+        theoreticalFreq[0] = static_cast<float>(countOfValues[0])/frequencies.at(0).size();
+
+        float XI_square (0);
+        for (auto x : frequencies.at(0))
+        {
+            XI_square += pow(static_cast<float>(x.second)-theoreticalFreq[0], 2)/theoreticalFreq[0];
+        }
+        qDebug() << XI_square << endl;
+        for (size_t i = 0; i < frequencies.size(); i++)
+        {
+            qDebug() << "i=" << i << " countOfValues=" << countOfValues[i] << " teoreticalFreq=" << theoreticalFreq[i] << endl;
+        }
+
+        for (size_t i = 0; i < frequencies.size(); i++)
+        {
+            for (auto x : frequencies.at(i))
+            {
+                qDebug() << "i=" << i << " value=" << x.first << " count=" << x.second << endl;
+            }
+        }
+    }
+    return 0;
+}
+
+void MainWindow::on_pushButton_6_pressed()
+{
+    Pirson();
+}
+
 void MainWindow::RangeValues(std::list<datavalue> &list)
 {
     int i (0), k (1);
@@ -650,6 +709,42 @@ void MainWindow::RangeValues(std::list<datavalue> &list)
         else
         {
             it->rank = i;
+        }
+    }
+}
+
+void MainWindow::on_pushButton_7_pressed()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/home", tr("CSV (*.csv)"));
+    boost::filesystem::ifstream file(fileName.toStdWString());
+    if (file.is_open())
+    {
+        CSVReader reader(file, global_counter);
+        vector->assign(reader.getData()->begin(), reader.getData()->end());
+        InitializeListWidget(vector);
+    }
+    else
+    {
+        qDebug() << strerror(errno) << endl;
+    }
+    file.close();
+
+}
+
+void MainWindow::InitializeListWidget(std::vector<std::list<datavalue>> *vec)
+{
+    ui->tableWidget->clear();
+    ui->tableWidget->setRowCount(vec->size());
+    for (size_t i = 0; i < vec->size(); i++)
+    {
+        for (auto it = vec->at(i).begin(); it != vec->at(i).end(); ++it)
+        {
+            if (vec->at(i).size() > static_cast<size_t>(ui->tableWidget->columnCount()) || vector->size() == 1)
+            {
+                ui->tableWidget->setColumnCount(vec->at(i).size());
+            }
+            QString str = QString("%1").arg(it->num);
+            ui->tableWidget->setItem(i, std::distance(vec->at(i).begin(), it), new QTableWidgetItem(str));
         }
     }
 }
