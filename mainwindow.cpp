@@ -616,6 +616,13 @@ void MainWindow::on_pushButton_5_pressed()
 
 int MainWindow::Pirson()
 {
+    if (vector->size() == 0)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Потрібен хоч один набір для порівняння.");
+        msgBox.exec();
+        return 0;
+    }
     std::vector<std::list<datavalue>> * vec = new std::vector<std::list<datavalue>> (*vector);
     std::vector<std::list<std::pair<float, int>>> frequencies;
 
@@ -647,6 +654,21 @@ int MainWindow::Pirson()
     std::vector<float> theoreticalFreq(frequencies.size());
     if (ui->radioButton->isChecked())
     {
+        if (frequencies.size() > 1)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Для порівняння з рівномірним розподілом потрібен лише 1 набір.");
+            msgBox.exec();
+            return 0;
+        }
+        if (frequencies.at(0).size() < 2)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("В наборі повинно бути не менше 2 розрядів.");
+            msgBox.exec();
+            return 0;
+        }
+
         for (auto y : frequencies.at(0))
         {
             countOfValues[0] += y.second;
@@ -660,14 +682,14 @@ int MainWindow::Pirson()
         {
             for (auto x : frequencies.at(0))
             {
-                XI_square += pow(abs(static_cast<float>(x.second)-theoreticalFreq[0]) - 0.5, 2)/theoreticalFreq[0];
+                XI_square += pow(fabs(static_cast<float>(x.second)-static_cast<float>(theoreticalFreq[0])) - 0.5f, 2)/theoreticalFreq[0];
             }
         }
         else
         {
             for (auto x : frequencies.at(0))
             {
-                XI_square += pow(static_cast<float>(x.second)-theoreticalFreq[0], 2)/theoreticalFreq[0];
+                XI_square += pow(static_cast<float>(x.second)-static_cast<float>(theoreticalFreq[0]), 2)/theoreticalFreq[0];
             }
         }
         float XI_005 = pirson[0][v-1];
