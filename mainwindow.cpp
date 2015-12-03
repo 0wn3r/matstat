@@ -655,23 +655,46 @@ int MainWindow::Pirson()
         theoreticalFreq[0] = static_cast<float>(countOfValues[0])/frequencies.at(0).size();
 
         float XI_square (0);
-        for (auto x : frequencies.at(0))
+        int v = frequencies.at(0).size()-1;
+        if (v == 1)
         {
-            XI_square += pow(static_cast<float>(x.second)-theoreticalFreq[0], 2)/theoreticalFreq[0];
-        }
-        qDebug() << XI_square << endl;
-        for (size_t i = 0; i < frequencies.size(); i++)
-        {
-            qDebug() << "i=" << i << " countOfValues=" << countOfValues[i] << " teoreticalFreq=" << theoreticalFreq[i] << endl;
-        }
-
-        for (size_t i = 0; i < frequencies.size(); i++)
-        {
-            for (auto x : frequencies.at(i))
+            for (auto x : frequencies.at(0))
             {
-                qDebug() << "i=" << i << " value=" << x.first << " count=" << x.second << endl;
+                XI_square += pow(abs(static_cast<float>(x.second)-theoreticalFreq[0]) - 0.5, 2)/theoreticalFreq[0];
             }
         }
+        else
+        {
+            for (auto x : frequencies.at(0))
+            {
+                XI_square += pow(static_cast<float>(x.second)-theoreticalFreq[0], 2)/theoreticalFreq[0];
+            }
+        }
+        float XI_005 = pirson[0][v-1];
+        float XI_001 = pirson[1][v-1];
+
+        QString str;
+        str = QString("%1").arg(XI_square);
+        ui->lineEdit_13->setText(str);
+        str = QString("%1").arg(XI_005);
+        ui->lineEdit_14->setText(str);
+        str = QString("%1").arg(XI_001);
+        ui->lineEdit_15->setText(str);
+
+        if (XI_square >= XI_001)
+        {
+            str = "Нульова гіпотеза відкидається з достовірністю (p<0.01).";
+        }
+        else if (XI_square >= XI_005)
+        {
+            str = "Нульова гіпотеза відкидається з достовірністю (p<0.05).";
+        }
+        else
+        {
+            str = "Нульова гіпотеза приймається.";
+        }
+
+        ui->textEdit_5->setText(str);
     }
     return 0;
 }
@@ -715,7 +738,7 @@ void MainWindow::RangeValues(std::list<datavalue> &list)
 
 void MainWindow::on_pushButton_7_pressed()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/home", tr("CSV (*.csv)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("CSV (*.csv)"));
     boost::filesystem::ifstream file(fileName.toStdWString());
     if (file.is_open())
     {

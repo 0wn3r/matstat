@@ -32,7 +32,7 @@
 }</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tab">
      <property name="enabled">
@@ -610,26 +610,29 @@
      <widget class="QGroupBox" name="groupBox">
       <property name="geometry">
        <rect>
-        <x>130</x>
-        <y>30</y>
-        <width>120</width>
+        <x>40</x>
+        <y>90</y>
+        <width>171</width>
         <height>80</height>
        </rect>
       </property>
       <property name="title">
-       <string>GroupBox</string>
+       <string>Тип порівняння</string>
       </property>
       <widget class="QRadioButton" name="radioButton">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>20</y>
-         <width>82</width>
+         <width>151</width>
          <height>17</height>
         </rect>
        </property>
        <property name="text">
-        <string>RadioButton</string>
+        <string>З нормальним розподілом</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
       <widget class="QRadioButton" name="radioButton_2">
@@ -637,14 +640,105 @@
         <rect>
          <x>10</x>
          <y>50</y>
-         <width>82</width>
+         <width>111</width>
          <height>17</height>
         </rect>
        </property>
        <property name="text">
-        <string>RadioButton</string>
+        <string>Емпіричні набори</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>30</y>
+        <width>171</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Критичне значення  χ² (p&lt;0.01)</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_14">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>50</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_15">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>50</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_13">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>50</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>30</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Емпіричне значення χ²</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>30</y>
+        <width>171</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Критичне значення  χ² (p&lt;0.05)</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="textEdit_5">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>180</y>
+        <width>211</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
    </widget>
