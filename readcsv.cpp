@@ -16,6 +16,8 @@ CSVReader::CSVReader(std::istream &str, unsigned short *globalCount)
 CSVReader::~CSVReader()
 {
     delete vec;
+    counter = nullptr;
+    delete counter;
 }
 
 void CSVReader::ParseFile(std::istream &m_str)
