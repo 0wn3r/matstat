@@ -651,7 +651,6 @@ int MainWindow::Pirson()
     }
     delete vec;
     std::vector<int> countOfValues(frequencies.size(), 0);
-    std::vector<float> theoreticalFreq(frequencies.size());
     if (ui->radioButton->isChecked())
     {
         if (frequencies.size() > 1)
@@ -674,22 +673,132 @@ int MainWindow::Pirson()
             countOfValues[0] += y.second;
         }
 
-        theoreticalFreq[0] = static_cast<float>(countOfValues[0])/frequencies.at(0).size();
+        float theoreticalFreq = static_cast<float>(countOfValues[0])/frequencies.at(0).size();
 
         float XI_square (0);
         int v = frequencies.at(0).size()-1;
+        if (v > 80)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Кількість порівнюваних розрядів не повинна перевищувати 80.");
+            msgBox.exec();
+            return 0;
+        }
         if (v == 1)
         {
             for (auto x : frequencies.at(0))
             {
-                XI_square += pow(fabs(static_cast<float>(x.second)-static_cast<float>(theoreticalFreq[0])) - 0.5f, 2)/theoreticalFreq[0];
+                XI_square += pow(fabs(static_cast<float>(x.second)-static_cast<float>(theoreticalFreq)) - 0.5f, 2)/theoreticalFreq;
             }
         }
         else
         {
             for (auto x : frequencies.at(0))
             {
-                XI_square += pow(static_cast<float>(x.second)-static_cast<float>(theoreticalFreq[0]), 2)/theoreticalFreq[0];
+                XI_square += pow(static_cast<float>(x.second)-static_cast<float>(theoreticalFreq), 2)/theoreticalFreq;
+            }
+        }
+        float XI_005 = pirson[0][v-1];
+        float XI_001 = pirson[1][v-1];
+
+        QString str;
+        str = QString("%1").arg(XI_square);
+        ui->lineEdit_13->setText(str);
+        str = QString("%1").arg(XI_005);
+        ui->lineEdit_14->setText(str);
+        str = QString("%1").arg(XI_001);
+        ui->lineEdit_15->setText(str);
+
+        if (XI_square >= XI_001)
+        {
+            str = "Нульова гіпотеза відкидається з достовірністю (p<0.01).";
+        }
+        else if (XI_square >= XI_005)
+        {
+            str = "Нульова гіпотеза відкидається з достовірністю (p<0.05).";
+        }
+        else
+        {
+            str = "Нульова гіпотеза приймається.";
+        }
+
+        ui->textEdit_5->setText(str);
+    }
+    else if(ui->radioButton_2->isChecked())
+    {
+        if (frequencies.size() < 2)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Кільікість наборів для порівняння не повинна бути менше 2.");
+            msgBox.exec();
+            return 0;
+        }
+        std::vector<int> setSums(frequencies.size(), 0);
+        std::vector<int> rowSums(frequencies.at(0).size(), 0);
+        int fullSum (0);
+        for (size_t i = 0; i < frequencies.size(); i++)
+        {
+            for (auto it = frequencies.at(i).begin(); it != frequencies.at(i).end(); ++it)
+            {
+                rowSums[std::distance(frequencies.at(i).begin(), it)] += it->second;
+                setSums[i] += it->second;
+            }
+            fullSum += setSums[i];
+        }
+
+        std::vector<std::list<std::pair<float, float>>> theoreticalFreq;
+        std::list<std::pair<float, float>> templist;
+        for (size_t i = 0; i < frequencies.size(); i++)
+        {
+            templist.clear();
+            for (auto it = frequencies.at(i).begin(); it != frequencies.at(i).end(); ++it)
+            {
+                std::pair<float, float> pair(it->first, static_cast<float>(rowSums[std::distance(frequencies.at(i).begin(), it)])*(static_cast<float>(setSums[i])/fullSum));
+                templist.push_back(pair);
+            }
+            theoreticalFreq.push_back(templist);
+        }
+
+        float XI_square (0);
+        unsigned int v = frequencies.at(0).size();
+        for (size_t i = 0; i < frequencies.size(); i++)
+        {
+            if (v != frequencies.at(i).size())
+            {
+                QMessageBox msgBox;
+                msgBox.setText("Кількість розрядів в порівнюваних наборах повинна бути однакова.");
+                msgBox.exec();
+                return 0;
+            }
+        }
+        v -= 1;
+        if (v > 80)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Кількість порівнюваних розрядів не повинна перевищувати 80.");
+            msgBox.exec();
+            return 0;
+        }
+        if (v == 1)
+        {
+            for(size_t i = 0; i < frequencies.size(); i++)
+            {
+                for (auto it = frequencies.at(i).begin(); it != frequencies.at(i).end(); ++it)
+                {
+                    float tfreq = std::next(theoreticalFreq.at(i).begin(), std::distance(frequencies.at(i).begin(), it))->second;
+                    XI_square += pow(fabs(static_cast<float>(it->second)-tfreq) - 0.5f, 2)/tfreq;
+                }
+            }
+        }
+        else
+        {
+            for(size_t i = 0; i < frequencies.size(); i++)
+            {
+                for (auto it = frequencies.at(i).begin(); it != frequencies.at(i).end(); ++it)
+                {
+                    float tfreq = std::next(theoreticalFreq.at(i).begin(), std::distance(frequencies.at(i).begin(), it))->second;
+                    XI_square += pow(static_cast<float>(it->second)-tfreq, 2)/tfreq;
+                }
             }
         }
         float XI_005 = pirson[0][v-1];
@@ -764,13 +873,16 @@ void MainWindow::on_pushButton_7_pressed()
     boost::filesystem::ifstream file(fileName.toStdWString());
     if (file.is_open())
     {
-        CSVReader reader(file, global_counter);
+        CSVReader reader(file, &global_counter);
         vector->assign(reader.getData()->begin(), reader.getData()->end());
         InitializeListWidget(vector);
     }
     else
     {
-        qDebug() << strerror(errno) << endl;
+        QMessageBox msgBox;
+        msgBox.setText(strerror(errno));
+        msgBox.exec();
+
     }
     file.close();
 

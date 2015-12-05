@@ -23,13 +23,13 @@ class CSVReader
 {
 public:
     CSVReader(std::istream &m_str);
-    CSVReader(std::istream &m_str, unsigned short globalCount);
+    CSVReader(std::istream &m_str, unsigned short *globalCount);
     ~CSVReader();
     void ParseFile(std::istream &m_str);
     std::vector<std::list<datavalue>>const* getData() const {return vec;}
 private:
     std::vector<std::list<datavalue>> *vec;
-    unsigned short counter;
+    unsigned short *counter;
 };
 
 #endif // READCSV_H

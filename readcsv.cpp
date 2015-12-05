@@ -6,7 +6,7 @@ CSVReader::CSVReader(std::istream &str)
     ParseFile(str);
 }
 
-CSVReader::CSVReader(std::istream &str, unsigned short globalCount)
+CSVReader::CSVReader(std::istream &str, unsigned short *globalCount)
 {
     vec = new std::vector<std::list<datavalue>>;
     counter = globalCount;
@@ -29,7 +29,10 @@ void CSVReader::ParseFile(std::istream &m_str)
         templist.clear();
         while (getline(lineStream, data, ';'))
         {
-            templist.push_back({std::stod(data), counter, 0, 0});
+            if (data.size() > 0)
+            {
+                templist.push_back({std::stod(data), *counter, 0, 0});
+            }
         }
         vec->push_back(templist);
         counter++;
